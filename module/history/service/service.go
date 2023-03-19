@@ -1,7 +1,6 @@
 package service
 
 import (
-	"go.mod/src/crms/model"
 	"go.mod/src/crms/module/history"
 )
 
@@ -15,18 +14,18 @@ func NewHistory(repo history.Repository) history.Service {
 	}
 }
 
-func (u *HistoryService) GetHistoryList(data map[string]interface{}) ([]*model.History, error) {
-	return u.repo.GetHistoryList(data)
-}
-func (u *HistoryService) GetHistory(in *model.History) (*model.History, error) {
-	return u.repo.GetHistory(in)
-}
-func (u *HistoryService) CreateHistory(in *model.History) (*model.History, error) {
-	return u.repo.CreateHistory(in)
-}
-func (u *HistoryService) UpdateHistory(in *model.History) (*model.History, error) {
-	return u.repo.UpdateHistory(in)
-}
-func (u *HistoryService) DeleteHistory(in *model.History) error {
-	return u.repo.DeleteHistory(in)
-}
+//func (u *HistoryService) GetHistoryList(data map[string]interface{}) ([]*model.History, error) {
+//	return u.repo.GetHistoryList(data)
+//}
+//func (u *HistoryService) GetHistory(in *model.History) (*model.History, error) {
+//	return u.repo.GetHistory(in)
+//}
+//func (u *HistoryService) CreateHistory(in *model.History) (*model.History, error) {
+//	return u.repo.CreateHistory(in)
+//}
+//func (u *HistoryService) UpdateHistory(in *model.History) (*model.History, error) {
+//	return u.repo.UpdateHistory(in)
+//}
+//func (u *HistoryService) DeleteHistory(in *model.History) error {
+//	return u.repo.DeleteHistory(in)
+//}

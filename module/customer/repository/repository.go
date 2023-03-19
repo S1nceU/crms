@@ -27,12 +27,9 @@ func (u *CustomerRepository) GetCustomerList() ([]*model.Customer, error) {
 
 func (u *CustomerRepository) GetCustomer(in *model.Customer) (*model.Customer, error) {
 	var err error
-	if in.ID == "" {
-		fmt.Println("test nil")
-	}
 
 	if err = u.orm.Where("ID = ?", in.ID).Find(&in).Error; in.Customer_id == 0 {
-		return nil, errors.New("There is no this customer.")
+		return nil, errors.New("Error CRMS : There is no this customer.")
 	}
 	fmt.Println(err)
 	return in, err
@@ -43,7 +40,7 @@ func (u *CustomerRepository) GetCustomerForID(customer_id int) (*model.Customer,
 	var in *model.Customer
 
 	if err = u.orm.Where("customer_id = ?", customer_id).Find(&in).Error; in.Name == "" {
-		return nil, errors.New("There is no this customer.")
+		return nil, errors.New("Error CRMS : There is no this customer.")
 	}
 	return in, err
 }
@@ -72,10 +69,10 @@ func (u *CustomerRepository) DeleteCustomer(customer_id int) error {
 	return err
 }
 
-func (u *CustomerRepository) GetCustomerListForCitizenship(in string) ([]*model.Customer, error) {
+func (u *CustomerRepository) GetCustomerListForCitizenship(in *model.Customer) ([]*model.Customer, error) {
 	var err error
 	var out []*model.Customer
-	if err = u.orm.Where("Citizenship = ?", in).Find(&out).Error; err != nil {
+	if err = u.orm.Where("Citizenship = ?", in.Citizenship).Find(&out).Error; err != nil {
 		return nil, err
 	}
 	return out, err
