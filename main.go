@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"go.mod/src/crms/model"
-	cr "go.mod/src/crms/module/customer/repository"
+	//cr "go.mod/src/crms/module/customer/repository"
+	hr "go.mod/src/crms/module/history/repository"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -32,42 +33,16 @@ func main() {
 		//_ = customerRepo
 	}
 	var (
-		customerRepo = cr.NewCustomerRepository(db)
-		//hisRepo  = hr.NewHistoryRepository(db)
+		//customerRepo = cr.NewCustomerRepository(db)
+		hisRepo = hr.NewHistoryRepository(db)
 	)
-	newC := &model.Customer{
-		Customer_id: 2,
-		//Name:        "Sophia",
-		//Gender:      "female",
-		//Birthday:    "3/07",
-		//ID:      "test",
-		//Address: "Taiwan",
-		//Phonenumber: "test",
-		//Carnumber:   "test",
-		Citizenship: "Taiwan",
-		//Note:        "test",
-	}
-	_ = newC
+	newH := &model.History{}
+	_ = newH
 
-	//if point, err := customerRepo.UpdateCustomer(newC); err != nil {
-	//	//panic("錯誤 :" + err.Error())
-	//	fmt.Println("錯誤: " + err.Error())
-	//} else {
-	//	fmt.Println("你為什麼會動", *point)
-	//}
-	if point, err := customerRepo.GetCustomer(newC); err != nil {
+	if point, err := hisRepo.GetHistoryList(); err != nil {
 		//panic("錯誤 :" + err.Error())
 		fmt.Println("錯誤: " + err.Error())
 	} else {
-		fmt.Println("你為什麼會動", *point)
+		fmt.Println("你為什麼會動", point)
 	}
-	//if err := customerRepo.DeleteCustomer(2); err != nil {
-	//	//panic("錯誤 :" + err.Error())
-	//	fmt.Println("錯誤: " + err.Error())
-	//} else {
-	//	fmt.Println("你為什麼會動")
-	//}
-	//point, err := customerRepo.GetCustomerForID(2)
-	//_ = err
-	//fmt.Println(point)
 }

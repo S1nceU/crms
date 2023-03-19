@@ -27,19 +27,13 @@ func (u *CustomerRepository) GetCustomerList() ([]*model.Customer, error) {
 
 func (u *CustomerRepository) GetCustomer(in *model.Customer) (*model.Customer, error) {
 	var err error
-	fmt.Println(in.ID, in.Citizenship, in.Customer_id)
 	if in.ID == "" {
 		fmt.Println("test nil")
 	}
 
-	if err = u.orm.Where("ID = ? AND Citizenship = ?", in.ID, in.Citizenship).Find(&in).Error; in.Customer_id == 0 {
-		if err = u.orm.Where("customer_id = ?", in.Customer_id).Find(&in).Error; in.Customer_id == 0 {
-			return nil, errors.New("There is no this customer.")
-		}
+	if err = u.orm.Where("ID = ?", in.ID).Find(&in).Error; in.Customer_id == 0 {
+		return nil, errors.New("There is no this customer.")
 	}
-	//if err = u.orm.Where("customer_id = ?", in.Customer_id).Find(&in).Error; in.Customer_id == 0 {
-	//	return nil, errors.New("There is no this customer.")
-	//}
 	fmt.Println(err)
 	return in, err
 }
@@ -47,8 +41,8 @@ func (u *CustomerRepository) GetCustomer(in *model.Customer) (*model.Customer, e
 func (u *CustomerRepository) GetCustomerForID(customer_id int) (*model.Customer, error) {
 	var err error
 	var in *model.Customer
-	err = u.orm.Where("customer_id = ?", customer_id).Find(&in).Error
-	if in.Customer_id == 0 {
+
+	if err = u.orm.Where("customer_id = ?", customer_id).Find(&in).Error; in.Name == "" {
 		return nil, errors.New("There is no this customer.")
 	}
 	return in, err
@@ -61,10 +55,11 @@ func (u *CustomerRepository) CreateCustomer(in *model.Customer) (*model.Customer
 }
 
 func (u *CustomerRepository) UpdateCustomer(in *model.Customer) (*model.Customer, error) {
-	if _, err := u.GetCustomerForID(in.Customer_id); err != nil {
+	var err error
+	if _, err = u.GetCustomerForID(in.Customer_id); err != nil {
 		return nil, err
 	}
-	err := u.orm.Save(&in).Error
+	err = u.orm.Save(&in).Error
 	return in, err
 }
 
@@ -74,8 +69,14 @@ func (u *CustomerRepository) DeleteCustomer(customer_id int) error {
 		return err
 	}
 	err := u.orm.Where("customer_id = ?", customer_id).Delete(&in).Error
-	fmt.Println(err)
 	return err
 }
 
-//func (u *CustomerRepository)
+func (u *CustomerRepository) GetCustomerListForCitizenship(in string) ([]*model.Customer, error) {
+	var err error
+	var out []*model.Customer
+	if err = u.orm.Where("Citizenship = ?", in).Find(&out).Error; err != nil {
+		return nil, err
+	}
+	return out, err
+}

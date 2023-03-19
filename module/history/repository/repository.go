@@ -16,10 +16,10 @@ func NewHistoryRepository(orm *gorm.DB) history.Repository {
 	}
 }
 
-func (u *HistoryRepository) GetHistoryList(map[string]interface{}) ([]*model.History, error) {
+func (u *HistoryRepository) GetHistoryList() ([]*model.History, error) {
 	var err error
-	var in = make([]*model.History, 0)
-	err = u.orm.First(&in).Error
+	var in []*model.History
+	err = u.orm.Find(&in).Error
 	return in, err
 }
 
