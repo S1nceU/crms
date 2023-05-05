@@ -35,11 +35,10 @@ func (u *CustomerRepository) GetCustomer(in *model.Customer) (*model.Customer, e
 	return in, err
 }
 
-func (u *CustomerRepository) GetCustomerForID(customer_id int) (*model.Customer, error) {
+func (u *CustomerRepository) GetCustomerForCID(in *model.Customer) (*model.Customer, error) {
 	var err error
-	var in *model.Customer
 
-	if err = u.orm.Where("customer_id = ?", customer_id).Find(&in).Error; in.Name == "" {
+	if err = u.orm.Where("customer_id = ?", in.Customer_id).Find(&in).Error; in.Name == "" {
 		return nil, errors.New("Error CRMS : There is no this customer.")
 	}
 	return in, err
@@ -53,19 +52,18 @@ func (u *CustomerRepository) CreateCustomer(in *model.Customer) (*model.Customer
 
 func (u *CustomerRepository) UpdateCustomer(in *model.Customer) (*model.Customer, error) {
 	var err error
-	if _, err = u.GetCustomerForID(in.Customer_id); err != nil {
+	if _, err = u.GetCustomerForCID(in); err != nil {
 		return nil, err
 	}
 	err = u.orm.Save(&in).Error
 	return in, err
 }
 
-func (u *CustomerRepository) DeleteCustomer(customer_id int) error {
-	var in *model.Customer
-	if _, err := u.GetCustomerForID(customer_id); err != nil {
+func (u *CustomerRepository) DeleteCustomer(in *model.Customer) error {
+	if _, err := u.GetCustomerForCID(in); err != nil {
 		return err
 	}
-	err := u.orm.Where("customer_id = ?", customer_id).Delete(&in).Error
+	err := u.orm.Where("customer_id = ?", in.Customer_id).Delete(&in).Error
 	return err
 }
 

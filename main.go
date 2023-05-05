@@ -64,10 +64,10 @@ func main() {
 	_ = newH
 	_ = newC
 
-	if point, err := customerSer.GetCustomerListForCitizenship(newC.Citizenship); err != nil {
+	if point, err := customerSer.GetCustomerForCID(5); err != nil {
 		//panic("錯誤 :" + err.Error())
 		fmt.Println("錯誤: " + err.Error())
 	} else {
-		fmt.Println("你為什麼會動", point)
+		fmt.Println("你為什麼會動\n", point)
 	}
 }
