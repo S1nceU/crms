@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 	"go.mod/src/crms/model"
 	"go.mod/src/crms/module/customer"
 	"gorm.io/gorm"
@@ -31,7 +30,6 @@ func (u *CustomerRepository) GetCustomer(in *model.Customer) (*model.Customer, e
 	if err = u.orm.Where("ID = ?", in.ID).Find(&in).Error; in.Customer_id == 0 {
 		return nil, errors.New("Error CRMS : There is no this customer.")
 	}
-	fmt.Println(err)
 	return in, err
 }
 
