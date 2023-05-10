@@ -26,9 +26,8 @@ func (u *CustomerRepository) GetCustomerList() ([]*model.Customer, error) {
 
 func (u *CustomerRepository) GetCustomer(in *model.Customer) (*model.Customer, error) {
 	var err error
-
 	if err = u.orm.Where("ID = ?", in.ID).Find(&in).Error; in.Customer_id == 0 {
-		return nil, errors.New("Error CRMS : There is no this customer.")
+		return in, errors.New("Error CRMS : There is no this customer.")
 	}
 	return in, err
 }

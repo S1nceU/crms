@@ -63,12 +63,13 @@ func main() {
 	}
 	_ = newH
 	_ = newC
-	input_json := []byte(`{"Name":"John", "Gender":"male", "Birthday":"9/26", "ID":"A123456789", "Citizenship":"Taichung"}`)
+	input_json := []byte(`{"Name":"John", "Gender":"male", "Birthday":"9/26", "ID":"A123456700", "Citizenship":"Taichung"}`)
 	if point, err := customerSer.CreateCustomer(input_json); err != nil {
 		//panic("錯誤 :" + err.Error())
 		fmt.Println("錯誤: " + err.Error())
 	} else {
-		fmt.Println("你為什麼會動\n", point)
+		_ = point
+		fmt.Println("你為什麼會動")
 	}
 	//if point, err := customerSer.GetCustomer("A12345678"); err != nil {
 	//	//panic("錯誤 :" + err.Error())

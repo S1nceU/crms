@@ -63,13 +63,11 @@ func (u *CustomerService) GetCustomerForCID(in int) (*model.Customer, error) {
 func (u *CustomerService) CreateCustomer(in []byte) (*model.Customer, error) {
 	var err error
 	var newCustomer *model.Customer
-	var testExisted *model.Customer
-	testExisted.Customer_id = 0
-	_ = testExisted
 	json.Unmarshal(in, &newCustomer)
-	if testExisted, err = u.repo.GetCustomer(newCustomer); testExisted.Customer_id != 0 {
+	if newCustomer, err = u.repo.GetCustomer(newCustomer); err != nil {
+		newCustomer, err = u.repo.CreateCustomer(newCustomer)
+		return newCustomer, err
+	} else {
 		return nil, errors.New("Error CRMS : This customer is already existed.")
 	}
-	newCustomer, err = u.repo.CreateCustomer(newCustomer)
-	return newCustomer, err
 }
