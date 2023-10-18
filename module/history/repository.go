@@ -1,6 +1,6 @@
 package history
 
-import "go.mod/src/crms/model"
+import "crms/model"
 
 type Repository interface {
 	GetHistoryList() ([]*model.History, error)

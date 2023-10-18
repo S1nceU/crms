@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"go.mod/src/crms/model"
-	"go.mod/src/crms/module/history"
+	"crms/model"
+	"crms/module/history"
 	"gorm.io/gorm"
 )
 

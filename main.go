@@ -1,10 +1,10 @@
 package main
 
 import (
+	"crms/model"
+	cr "crms/module/customer/repository"
+	cs "crms/module/customer/service"
 	"fmt"
-	"go.mod/src/crms/model"
-	cr "go.mod/src/crms/module/customer/repository"
-	cs "go.mod/src/crms/module/customer/service"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -63,14 +63,16 @@ func main() {
 	}
 	_ = newH
 	_ = newC
-	input_json := []byte(`{"Name":"John", "Gender":"male", "Birthday":"9/26", "ID":"A123456700", "Citizenship":"Taichung"}`)
-	if point, err := customerSer.CreateCustomer(input_json); err != nil {
-		//panic("錯誤 :" + err.Error())
-		fmt.Println("錯誤: " + err.Error())
-	} else {
-		_ = point
-		fmt.Println("你為什麼會動")
-	}
+	_ = customerSer
+	_ = customerRepo
+	//input_json := []byte(`{"Name":"John", "Gender":"male", "Birthday":"9/26", "ID":"A123456700", "Citizenship":"Taichung"}`)
+	//if point, err := customerSer.CreateCustomer(input_json); err != nil {
+	//	//panic("錯誤 :" + err.Error())
+	//	fmt.Println("錯誤: " + err.Error())
+	//} else {
+	//	_ = point
+	//	fmt.Println("你為什麼會動")
+	//}
 	//if point, err := customerSer.GetCustomer("A12345678"); err != nil {
 	//	//panic("錯誤 :" + err.Error())
 	//	fmt.Println("錯誤: " + err.Error())

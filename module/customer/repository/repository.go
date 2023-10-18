@@ -1,9 +1,9 @@
 package repository
 
 import (
+	"crms/model"
+	"crms/module/customer"
 	"errors"
-	"go.mod/src/crms/model"
-	"go.mod/src/crms/module/customer"
 	"gorm.io/gorm"
 )
 

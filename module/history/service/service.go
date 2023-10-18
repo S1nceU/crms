@@ -1,7 +1,7 @@
 package service
 
 import (
-	"go.mod/src/crms/module/history"
+	"crms/module/history"
 )
 
 type HistoryService struct {

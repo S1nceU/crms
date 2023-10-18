@@ -1,10 +1,10 @@
 package service
 
 import (
+	"crms/model"
+	"crms/module/customer"
 	"encoding/json"
 	"errors"
-	"go.mod/src/crms/model"
-	"go.mod/src/crms/module/customer"
 )
 
 type CustomerService struct {

@@ -1,6 +1,6 @@
 package customer
 
-import "go.mod/src/crms/model"
+import "crms/model"
 
 type Repository interface {
 	GetCustomerList() ([]*model.Customer, error)                                 // Get all Customer
