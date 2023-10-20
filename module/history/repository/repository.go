@@ -26,7 +26,7 @@ func (u *HistoryRepository) GetHistoryList() ([]*model.History, error) {
 func (u *HistoryRepository) GetHistory(in *model.History) ([]*model.History, error) {
 	var err error
 	var out []*model.History
-	err = u.orm.Where("customer_id = ?", in.Customer_id).Find(&out).Error
+	err = u.orm.Where("customer_id = ?", in.CustomerId).Find(&out).Error
 	return out, err
 }
 

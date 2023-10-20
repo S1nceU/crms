@@ -11,11 +11,11 @@ import (
 
 const (
 	USERNAME = "root"
-	PASSWORD = "xu.6j03cj86u;6au/65k6"
+	PASSWORD = "password"
 	NETWORK  = "tcp"
 	SERVER   = "127.0.0.2"
 	PORT     = 3306
-	DATABASE = "crms_sql"
+	DATABASE = "crms"
 )
 
 func main() {
@@ -25,12 +25,20 @@ func main() {
 		dbErr error
 	)
 	db, dbErr = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
 	if dbErr != nil {
 		panic("使用 gorm 連線 DB 發生錯誤，原因為 " + dbErr.Error())
 	} else {
 		fmt.Println("連線成功")
-		_ = db
-		//_ = customerRepo
+		var err error
+		if err = db.AutoMigrate(&model.Customer{}); err != nil {
+			return
+		}
+		if err = db.AutoMigrate(&model.History{}); err != nil {
+			return
+		}
+
+		// defer db.close 似乎已被 gorm 刪掉功能
 	}
 	var (
 		customerRepo = cr.NewCustomerRepository(db)
@@ -42,41 +50,43 @@ func main() {
 
 	newC := &model.Customer{
 		//Customer_id :,
-		Name:        "",
-		Gender:      "",
-		Birthday:    "",
-		ID:          "",
-		Address:     "",
-		Phonenumber: "",
+		Name:        "Jason",
+		Gender:      "Male",
+		Birthday:    "2001/09/25",
+		ID:          "L123456789",
+		Address:     "Taichung",
+		Phonenumber: "0987654321",
 		Carnumber:   "",
-		Citizenship: "Taipei",
+		Citizenship: "Taiwan",
 		Note:        "",
 	}
 
 	newH := &model.History{
-		//History_id  int    `json:"history_id"  gorm:"primary_key;auto_increase;not null"`
-		Customer_id: 5,
-		Date:        "8/25",
-		Nofpeople:   1,
-		Price:       200,
+		//History_id
+		CustomerId: 5,
+		Date:       "8/25",
+		Nofpeople:  1,
+		Price:      200,
 		//Note:        "",
 	}
 	_ = newH
 	_ = newC
-	_ = customerSer
 	_ = customerRepo
-	//input_json := []byte(`{"Name":"John", "Gender":"male", "Birthday":"9/26", "ID":"A123456700", "Citizenship":"Taichung"}`)
-	//if point, err := customerSer.CreateCustomer(input_json); err != nil {
-	//	//panic("錯誤 :" + err.Error())
+	_ = customerSer
+
+	inputJson := []byte(`{"CustomerId":2,"Name":"John", "Gender":"male", "Birthday":"2001/09/26", "ID":"A123456700", "Citizenship":"Taiwan", "Address":"Taichung"}`)
+	_ = inputJson
+
+	if point, err := customerSer.GetCustomerForCID(2); err != nil {
+		fmt.Println("錯誤: " + err.Error())
+	} else {
+		fmt.Println("你為什麼會動\n", point, err)
+	}
+
+	//if err := customerSer.DeleteCustomer(2); err != nil {
 	//	fmt.Println("錯誤: " + err.Error())
 	//} else {
-	//	_ = point
-	//	fmt.Println("你為什麼會動")
+	//	fmt.Println("你為什麼會動\n", err)
 	//}
-	//if point, err := customerSer.GetCustomer("A12345678"); err != nil {
-	//	//panic("錯誤 :" + err.Error())
-	//	fmt.Println("錯誤: " + err.Error())
-	//} else {
-	//	fmt.Println("你為什麼會動\n", point)
-	//}
+
 }
