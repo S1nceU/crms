@@ -23,6 +23,15 @@ func (u *CustomerRepository) GetCustomerList() ([]*model.Customer, error) {
 	return in, err
 }
 
+func (u *CustomerRepository) GetCustomerListForCitizenship(in *model.Customer) ([]*model.Customer, error) {
+	var err error
+	var out []*model.Customer
+	if err = u.orm.Where("Citizenship = ?", in.Citizenship).Find(&out).Error; err != nil {
+		return nil, err
+	}
+	return out, err
+}
+
 func (u *CustomerRepository) GetCustomer(in *model.Customer) (*model.Customer, error) {
 	var err error
 	err = u.orm.Where("ID = ?", in.ID).Find(&in).Error
@@ -51,13 +60,4 @@ func (u *CustomerRepository) DeleteCustomer(in *model.Customer) error {
 	var err error
 	err = u.orm.Where("customer_id = ?", in.CustomerId).Delete(&in).Error
 	return err
-}
-
-func (u *CustomerRepository) GetCustomerListForCitizenship(in *model.Customer) ([]*model.Customer, error) {
-	var err error
-	var out []*model.Customer
-	if err = u.orm.Where("Citizenship = ?", in.Citizenship).Find(&out).Error; err != nil {
-		return nil, err
-	}
-	return out, err
 }

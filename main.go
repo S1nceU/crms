@@ -4,6 +4,8 @@ import (
 	"crms/model"
 	cr "crms/module/customer/repository"
 	cs "crms/module/customer/service"
+	hr "crms/module/history/repository"
+	hs "crms/module/history/service"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -42,11 +44,10 @@ func main() {
 	}
 	var (
 		customerRepo = cr.NewCustomerRepository(db)
-		//hisRepo      = hr.NewHistoryRepository(db)
-		customerSer = cs.NewCustomer(customerRepo)
-		//hisSer       = cs.NewCustomer(hisRepo)
+		hisRepo      = hr.NewHistoryRepository(db)
+		customerSer  = cs.NewCustomer(customerRepo)
+		hisSer       = hs.NewHistory(hisRepo)
 	)
-	//_ = hisSer
 
 	newC := &model.Customer{
 		//Customer_id :,
@@ -73,20 +74,21 @@ func main() {
 	_ = newC
 	_ = customerRepo
 	_ = customerSer
+	_ = hisSer
+	_ = hisRepo
 
 	inputJson := []byte(`{"CustomerId":2,"Name":"John", "Gender":"male", "Birthday":"2001/09/26", "ID":"A123456700", "Citizenship":"Taiwan", "Address":"Taichung"}`)
 	_ = inputJson
 
-	if point, err := customerSer.GetCustomerForCID(2); err != nil {
+	if point, err := hisSer.GetHistoryForHId(2); err != nil {
 		fmt.Println("錯誤: " + err.Error())
 	} else {
-		fmt.Println("你為什麼會動\n", point, err)
+		fmt.Println("你為什麼會動\n", point)
 	}
-
-	//if err := customerSer.DeleteCustomer(2); err != nil {
+	//if point, err := customerSer.GetCustomerForCID(2); err != nil {
 	//	fmt.Println("錯誤: " + err.Error())
 	//} else {
-	//	fmt.Println("你為什麼會動\n", err)
+	//	fmt.Println("你為什麼會動\n", point)
 	//}
 
 }

@@ -1,9 +1,13 @@
 package history
 
+import "crms/model"
+
 type Service interface {
-	//GetHistoryList(map[string]interface{}) ([]*model.History, error)
-	//GetHistory(in *model.History) (*model.History, error)
-	//CreateHistory(in *model.History) (*model.History, error)
-	//UpdateHistory(in *model.History) (*model.History, error)
-	//DeleteHistory(in *model.History) error
+	GetHistoryList() ([]model.History, error)
+	GetHistory(in int) ([]model.History, error)
+	GetHistoryForDate(in string) ([]model.History, error)
+	GetHistoryForHId(in int) (*model.History, error)
+	//CreateHistory(in []byte) (*model.History, error)
+	//UpdateHistory(in []byte) (*model.History, error)
+	//DeleteHistory(in int) error
 }
