@@ -3,6 +3,7 @@ package service
 import (
 	"crms/model"
 	"crms/module/history"
+	"encoding/json"
 	"errors"
 )
 
@@ -70,12 +71,44 @@ func (u *HistoryService) GetHistoryForHId(in int) (*model.History, error) {
 	return newHistory, err
 }
 
-//func (u *HistoryService) CreateHistory(in *model.History) (*model.History, error) {
-//	return u.repo.CreateHistory(in)
-//}
-//func (u *HistoryService) UpdateHistory(in *model.History) (*model.History, error) {
-//	return u.repo.UpdateHistory(in)
-//}
-//func (u *HistoryService) DeleteHistory(in *model.History) error {
-//	return u.repo.DeleteHistory(in)
-//}
+func (u *HistoryService) CreateHistory(in []byte) (*model.History, error) {
+	var err error
+	var newHistory *model.History
+	if err = json.Unmarshal(in, &newHistory); err != nil {
+		return nil, err
+	}
+	if _, err = u.repo.GetHistory(newHistory); err != nil {
+		return nil, err
+	}
+	newHistory, err = u.repo.CreateHistory(newHistory)
+	return newHistory, errors.New("error CRMS : There is no this customer")
+}
+
+func (u *HistoryService) UpdateHistory(in []byte) (*model.History, error) {
+	var err error
+	var newHistory *model.History
+	if err = json.Unmarshal(in, &newHistory); err != nil {
+		return nil, err
+	}
+	if _, err = u.GetHistoryForHId(newHistory.HistoryId); err != nil {
+		return nil, err
+	}
+	if newHistory, err = u.repo.UpdateHistory(newHistory); err != nil {
+		return nil, err
+	}
+	return newHistory, err
+}
+
+func (u *HistoryService) DeleteHistory(in int) error {
+	var err error
+	newHistory := &model.History{
+		HistoryId: in,
+	}
+	if _, err = u.GetHistoryForHId(newHistory.HistoryId); err != nil {
+		return err
+	}
+	if err = u.repo.DeleteHistory(newHistory); err != nil {
+		return err
+	}
+	return nil
+}

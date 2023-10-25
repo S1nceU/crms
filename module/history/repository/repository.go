@@ -51,7 +51,7 @@ func (u *HistoryRepository) CreateHistory(in *model.History) (*model.History, er
 
 func (u *HistoryRepository) UpdateHistory(in *model.History) (*model.History, error) {
 	var err error
-	err = u.orm.Save(&in).Error
+	err = u.orm.Model(in).Where("history_id = ?", in.HistoryId).Updates(&in).Error
 	return in, err
 }
 
