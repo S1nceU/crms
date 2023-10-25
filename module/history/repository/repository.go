@@ -26,7 +26,7 @@ func (u *HistoryRepository) GetHistoryList() ([]*model.History, error) {
 func (u *HistoryRepository) GetHistory(in *model.History) ([]*model.History, error) {
 	var err error
 	var out []*model.History
-	err = u.orm.Where("customer_id = ?", in.Customer_id).Find(&out).Error
+	err = u.orm.Where("customer_id = ?", in.CustomerId).Find(&out).Error
 	return out, err
 }
 
@@ -37,11 +37,10 @@ func (u *HistoryRepository) GetHistoryForDate(in *model.History) ([]*model.Histo
 	return out, err
 }
 
-func (u *HistoryRepository) GetHistoryForHistoryId(in int) (*model.History, error) {
+func (u *HistoryRepository) GetHistoryForHId(in *model.History) (*model.History, error) {
 	var err error
-	var out *model.History
-	err = u.orm.Where("history_id = ?", in).First(&out).Error
-	return out, err
+	err = u.orm.Where("history_id = ?", in.HistoryId).Find(&in).Error
+	return in, err
 }
 
 func (u *HistoryRepository) CreateHistory(in *model.History) (*model.History, error) {
@@ -52,13 +51,13 @@ func (u *HistoryRepository) CreateHistory(in *model.History) (*model.History, er
 
 func (u *HistoryRepository) UpdateHistory(in *model.History) (*model.History, error) {
 	var err error
-	err = u.orm.Save(&in).Error
+	err = u.orm.Model(in).Where("history_id = ?", in.HistoryId).Updates(&in).Error
 	return in, err
 }
 
-func (u *HistoryRepository) DeleteHistory(in int) error {
+func (u *HistoryRepository) DeleteHistory(in *model.History) error {
 	var out *model.History
 	var err error
-	err = u.orm.Where("history_id = ?", in).Delete(&out).Error
+	err = u.orm.Where("history_id = ?", in.HistoryId).Delete(&out).Error
 	return err
 }
