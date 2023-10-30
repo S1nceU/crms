@@ -11,7 +11,7 @@ type HistoryService struct {
 	repo history.Repository
 }
 
-func NewHistory(repo history.Repository) history.Service {
+func NewHistoryService(repo history.Repository) history.Service {
 	return &HistoryService{
 		repo: repo,
 	}

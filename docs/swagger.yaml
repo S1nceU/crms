@@ -1,0 +1,75 @@
+basePath: /api
+definitions:
+  model.Customer:
+    properties:
+      Address:
+        type: string
+      Birthday:
+        type: string
+      CarNumber:
+        type: string
+      Citizenship:
+        type: string
+      CustomerId:
+        type: integer
+      Gender:
+        type: string
+      ID:
+        type: string
+      Name:
+        type: string
+      Note:
+        type: string
+      PhoneNumber:
+        type: string
+      history:
+        $ref: '#/definitions/model.History'
+    type: object
+  model.History:
+    properties:
+      CustomerId:
+        type: integer
+      Date:
+        type: string
+      HistoryId:
+        type: integer
+      Nofpeople:
+        type: integer
+      Note:
+        type: string
+      Price:
+        type: integer
+      Room:
+        type: string
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact:
+    email: jjkk900925@gmail.com
+    name: Jason Yang
+    url: http://www.google.com
+  description: CRMS_Swagger information
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://www.google.com
+  title: CRMS_Swagger
+  version: "1.0"
+paths:
+  /customerList:
+    get:
+      description: Get all Customer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Customer'
+        "500":
+          description: '{"Message": "Internal Error!"}'
+          schema:
+            type: string
+      tags:
+      - Customer
+swagger: "2.0"

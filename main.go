@@ -1,12 +1,18 @@
 package main
 
 import (
+	_ "crms/docs"
 	"crms/model"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"net/http"
+
+	_customerHandlerHttpDelivery "crms/module/customer/delivery/http"
+	_customerRepo "crms/module/customer/repository"
+	_customerSer "crms/module/customer/service"
 )
 
 const (
@@ -17,6 +23,27 @@ const (
 	PORT     = 3306
 	DATABASE = "crms"
 )
+
+var swagHandler gin.HandlerFunc
+
+// @title CRMS_Swagger
+// @version 1.0
+// @description CRMS_Swagger information
+// @termsOfService http://www.google.com
+
+// @contact.name Jason Yang
+// @contact.url http://www.google.com
+// @contact.email jjkk900925@gmail.com
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host 127.0.0.1:8080
+// @BasePath /api
+
+func init() {
+	swagHandler = ginSwagger.WrapHandler(swaggerFiles.Handler)
+}
 
 func main() {
 	dsn := fmt.Sprintf("%s:%s@%s(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", USERNAME, PASSWORD, NETWORK, SERVER, PORT, DATABASE)
@@ -38,15 +65,15 @@ func main() {
 	}
 
 	server := gin.Default()
-	server.GET("/", hello)
+
+	customerRepo := _customerRepo.NewCustomerRepository(db)
+	customerSer := _customerSer.NewCustomerService(customerRepo)
+	_customerHandlerHttpDelivery.NewCustomerHandler(server, customerSer)
+	if swagHandler != nil {
+		server.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 	err := server.Run(":8080")
 	if err != nil {
 		return
 	}
-}
-
-func hello(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"Hello": "True",
-	})
 }

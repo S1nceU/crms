@@ -11,7 +11,7 @@ type CustomerService struct {
 	repo customer.Repository
 }
 
-func NewCustomer(repo customer.Repository) customer.Service {
+func NewCustomerService(repo customer.Repository) customer.Service {
 	return &CustomerService{
 		repo: repo,
 	}
