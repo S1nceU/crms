@@ -25,7 +25,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/customer": {
-            "post": {
+            "get": {
                 "description": "Get Customer by ID",
                 "produces": [
                     "application/json"
@@ -36,10 +36,48 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "example": "L123546789",
                         "description": "Customer ID",
                         "name": "ID",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": "{\"Message\": err.Error()}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "parameters": [
+                    {
+                        "description": "Customer Information",
+                        "name": "Customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Customer"
+                        }
                     }
                 ],
                 "responses": {
@@ -138,11 +176,11 @@ const docTemplate = `{
                 "HistoryId": {
                     "type": "integer"
                 },
-                "Nofpeople": {
-                    "type": "integer"
-                },
                 "Note": {
                     "type": "string"
+                },
+                "NumberOfPeople": {
+                    "type": "integer"
                 },
                 "Price": {
                     "type": "integer"

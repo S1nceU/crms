@@ -3,7 +3,6 @@ package service
 import (
 	"crms/model"
 	"crms/module/customer"
-	"encoding/json"
 	"errors"
 )
 
@@ -64,13 +63,10 @@ func (u *CustomerService) GetCustomerForCID(in int) (*model.Customer, error) {
 	return newCustomer, err
 }
 
-func (u *CustomerService) CreateCustomer(in []byte) (*model.Customer, error) {
+func (u *CustomerService) CreateCustomer(in *model.Customer) (*model.Customer, error) {
 	var err error
 	var newCustomer *model.Customer
-	if err = json.Unmarshal(in, &newCustomer); err != nil {
-		return nil, err
-	}
-	if newCustomer, err = u.repo.GetCustomer(newCustomer); newCustomer.CustomerId == 0 {
+	if newCustomer, err = u.repo.GetCustomer(in); newCustomer.CustomerId == 0 {
 		newCustomer, err = u.repo.CreateCustomer(newCustomer)
 		return newCustomer, err
 	} else {
@@ -78,13 +74,10 @@ func (u *CustomerService) CreateCustomer(in []byte) (*model.Customer, error) {
 	}
 }
 
-func (u *CustomerService) UpdateCustomer(in []byte) (*model.Customer, error) {
+func (u *CustomerService) UpdateCustomer(in *model.Customer) (*model.Customer, error) {
 	var err error
 	var newCustomer *model.Customer
-	if err = json.Unmarshal(in, &newCustomer); err != nil {
-		return nil, err
-	}
-	if _, err = u.GetCustomerForCID(newCustomer.CustomerId); err != nil {
+	if _, err = u.GetCustomerForCID(in.CustomerId); err != nil {
 		return nil, err
 	}
 	if newCustomer, err = u.repo.UpdateCustomer(newCustomer); err != nil {

@@ -33,10 +33,10 @@ definitions:
         type: string
       HistoryId:
         type: integer
-      Nofpeople:
-        type: integer
       Note:
         type: string
+      NumberOfPeople:
+        type: integer
       Price:
         type: integer
       Room:
@@ -57,14 +57,39 @@ info:
   version: "1.0"
 paths:
   /customer:
-    post:
+    get:
       description: Get Customer by ID
       parameters:
       - description: Customer ID
-        in: formData
+        example: L123546789
+        in: query
         name: ID
         required: true
         type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Customer'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - Customer
+    post:
+      consumes:
+      - application/json
+      description: Create Customer
+      parameters:
+      - description: Customer Information
+        in: body
+        name: Customer
+        required: true
+        schema:
+          $ref: '#/definitions/model.Customer'
       produces:
       - application/json
       responses:
