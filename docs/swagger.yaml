@@ -56,8 +56,32 @@ info:
   title: CRMS_Swagger
   version: "1.0"
 paths:
+  /customer:
+    post:
+      description: Get Customer by ID
+      parameters:
+      - description: Customer ID
+        in: formData
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Customer'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - Customer
   /customerList:
     get:
+      consumes:
+      - application/json
       description: Get all Customer
       produces:
       - application/json
