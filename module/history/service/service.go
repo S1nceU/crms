@@ -3,7 +3,6 @@ package service
 import (
 	"crms/model"
 	"crms/module/history"
-	"encoding/json"
 	"errors"
 )
 
@@ -71,29 +70,56 @@ func (u *HistoryService) GetHistoryForHId(in int) (*model.History, error) {
 	return newHistory, err
 }
 
-func (u *HistoryService) CreateHistory(in []byte) (*model.History, error) {
+func (u *HistoryService) CreateHistory(in *model.History) (*model.History, error) {
 	var err error
 	var newHistory *model.History
-	if err = json.Unmarshal(in, &newHistory); err != nil {
-		return nil, err
+
+	if in.CustomerId == 0 {
+		return nil, errors.New("error CRMS : History Info is incomplete")
 	}
-	if _, err = u.repo.GetHistory(newHistory); err != nil {
+	if in.Date == "" {
+		return nil, errors.New("error CRMS : History Info is incomplete")
+	}
+	if in.NumberOfPeople == 0 {
+		return nil, errors.New("error CRMS : History Info is incomplete")
+	}
+	if in.Price == 0 {
+		return nil, errors.New("error CRMS : History Info is incomplete")
+	}
+	if in.Note == "" {
+		return nil, errors.New("error CRMS : History Info is incomplete")
+	}
+
+	if _, err = u.repo.GetHistory(in); err != nil {
 		return nil, err
 	}
 	newHistory, err = u.repo.CreateHistory(newHistory)
 	return newHistory, errors.New("error CRMS : There is no this customer")
 }
 
-func (u *HistoryService) UpdateHistory(in []byte) (*model.History, error) {
+func (u *HistoryService) UpdateHistory(in *model.History) (*model.History, error) {
 	var err error
 	var newHistory *model.History
-	if err = json.Unmarshal(in, &newHistory); err != nil {
+	if in.CustomerId == 0 {
+		return nil, errors.New("error CRMS : History Info is incomplete")
+	}
+	if in.Date == "" {
+		return nil, errors.New("error CRMS : History Info is incomplete")
+	}
+	if in.NumberOfPeople == 0 {
+		return nil, errors.New("error CRMS : History Info is incomplete")
+	}
+	if in.Price == 0 {
+		return nil, errors.New("error CRMS : History Info is incomplete")
+	}
+	if in.Note == "" {
+		return nil, errors.New("error CRMS : History Info is incomplete")
+	}
+
+	if _, err = u.GetHistoryForHId(in.HistoryId); err != nil {
 		return nil, err
 	}
-	if _, err = u.GetHistoryForHId(newHistory.HistoryId); err != nil {
-		return nil, err
-	}
-	if newHistory, err = u.repo.UpdateHistory(newHistory); err != nil {
+	if newHistory, err = u.repo.UpdateHistory(in); err != nil {
 		return nil, err
 	}
 	return newHistory, err

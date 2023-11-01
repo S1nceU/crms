@@ -57,6 +57,27 @@ info:
   version: "1.0"
 paths:
   /customer:
+    delete:
+      description: DeleteCustomer by  CustomerId
+      parameters:
+      - description: Customer Id
+        in: query
+        name: CustomerId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Message": "Delete success'
+          schema:
+            type: string
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - Customer
     get:
       description: Get Customer by ID
       parameters:
@@ -83,6 +104,30 @@ paths:
       consumes:
       - application/json
       description: Create Customer
+      parameters:
+      - description: Customer Information
+        in: body
+        name: Customer
+        required: true
+        schema:
+          $ref: '#/definitions/model.Customer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Customer'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - Customer
+    put:
+      consumes:
+      - application/json
+      description: Modify Customer
       parameters:
       - description: Customer Information
         in: body

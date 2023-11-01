@@ -4,6 +4,7 @@ import (
 	"crms/model"
 	"crms/module/customer"
 	"errors"
+	"fmt"
 )
 
 type CustomerService struct {
@@ -66,6 +67,28 @@ func (u *CustomerService) GetCustomerForCID(in int) (*model.Customer, error) {
 func (u *CustomerService) CreateCustomer(in *model.Customer) (*model.Customer, error) {
 	var err error
 	var newCustomer *model.Customer
+
+	if in.Name == "" {
+		fmt.Println("Test1")
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+	if in.Gender != "Male" && in.Gender != "Female" {
+		fmt.Println("Test2")
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+	if in.Birthday == "" {
+		fmt.Println("Test3")
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+	if in.ID == "" {
+		fmt.Println("Test4")
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+	if in.Citizenship == "" {
+		fmt.Println("Test5")
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+
 	if newCustomer, err = u.repo.GetCustomer(in); newCustomer.CustomerId == 0 {
 		newCustomer, err = u.repo.CreateCustomer(newCustomer)
 		return newCustomer, err
@@ -77,10 +100,26 @@ func (u *CustomerService) CreateCustomer(in *model.Customer) (*model.Customer, e
 func (u *CustomerService) UpdateCustomer(in *model.Customer) (*model.Customer, error) {
 	var err error
 	var newCustomer *model.Customer
+	if in.Name == "" {
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+	if in.Gender != "Male" && in.Gender != "Female" {
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+	if in.Birthday == "" {
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+	if in.ID == "" {
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+	if in.Citizenship == "" {
+		return nil, errors.New("error CRMS : Customer Info is incomplete")
+	}
+
 	if _, err = u.GetCustomerForCID(in.CustomerId); err != nil {
 		return nil, err
 	}
-	if newCustomer, err = u.repo.UpdateCustomer(newCustomer); err != nil {
+	if newCustomer, err = u.repo.UpdateCustomer(in); err != nil {
 		return nil, err
 	}
 	return newCustomer, err
