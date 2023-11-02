@@ -13,6 +13,10 @@ import (
 	_customerHandlerHttpDelivery "crms/module/customer/delivery/http"
 	_customerRepo "crms/module/customer/repository"
 	_customerSer "crms/module/customer/service"
+
+	_historyHandlerHttpDelivery "crms/module/history/delivery/http"
+	_historyRepo "crms/module/history/repository"
+	_historySer "crms/module/history/service"
 )
 
 const (
@@ -69,6 +73,11 @@ func main() {
 	customerRepo := _customerRepo.NewCustomerRepository(db)
 	customerSer := _customerSer.NewCustomerService(customerRepo)
 	_customerHandlerHttpDelivery.NewCustomerHandler(server, customerSer)
+
+	historyRepo := _historyRepo.NewHistoryRepository(db)
+	historySer := _historySer.NewHistoryService(historyRepo)
+	_historyHandlerHttpDelivery.NewHistoryHandler(server, historySer)
+
 	if swagHandler != nil {
 		server.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}

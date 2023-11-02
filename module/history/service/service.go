@@ -34,6 +34,7 @@ func (u *HistoryService) GetHistory(in int) ([]model.History, error) {
 	newHistory := &model.History{
 		CustomerId: in,
 	}
+
 	if point, err = u.repo.GetHistory(newHistory); len(point) == 0 {
 		return nil, errors.New("error CRMS : There is no this customer or no history")
 	}

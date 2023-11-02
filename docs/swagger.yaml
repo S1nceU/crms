@@ -166,4 +166,44 @@ paths:
             type: string
       tags:
       - Customer
+  /history:
+    get:
+      description: Get History by CustomerId
+      parameters:
+      - description: Customer Id
+        in: query
+        name: CustomerId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.History'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - History
+  /historyList:
+    get:
+      consumes:
+      - application/json
+      description: Get all History
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.History'
+        "500":
+          description: '{"Message": "Internal Error!"}'
+          schema:
+            type: string
+      tags:
+      - History
 swagger: "2.0"

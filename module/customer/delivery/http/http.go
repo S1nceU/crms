@@ -50,8 +50,8 @@ func (u *CustomerHandler) GetCustomerList(c *gin.Context) {
 // @Failure 500 {string} string "{"Message": err.Error()}"
 // @Router /customer [get]
 func (u *CustomerHandler) GetCustomer(c *gin.Context) {
-	ID := c.Query("ID")
-	customerData, err := u.ser.GetCustomer(ID)
+	iD := c.Query("ID")
+	customerData, err := u.ser.GetCustomer(iD)
 	if err != nil {
 		if err.Error() == "error CRMS : There is no this customer" {
 			c.JSON(200, gin.H{
