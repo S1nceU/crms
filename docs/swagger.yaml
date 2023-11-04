@@ -58,7 +58,7 @@ info:
 paths:
   /customer:
     delete:
-      description: DeleteCustomer by  CustomerId
+      description: Delete Customer by CustomerId
       parameters:
       - description: Customer Id
         in: query
@@ -103,7 +103,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create Customer
+      description: Create a new Customer
       parameters:
       - description: Customer Information
         in: body
@@ -167,6 +167,27 @@ paths:
       tags:
       - Customer
   /history:
+    delete:
+      description: Delete History by HistoryId
+      parameters:
+      - description: History Id
+        in: query
+        name: HistoryId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Message": "Delete success'
+          schema:
+            type: string
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - History
     get:
       description: Get History by CustomerId
       parameters:
@@ -175,6 +196,52 @@ paths:
         name: CustomerId
         required: true
         type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.History'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - History
+    post:
+      description: Create a new History
+      parameters:
+      - description: History Information
+        in: body
+        name: History
+        required: true
+        schema:
+          $ref: '#/definitions/model.History'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.History'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - History
+    put:
+      consumes:
+      - application/json
+      description: Modify History
+      parameters:
+      - description: History Information
+        in: body
+        name: History
+        required: true
+        schema:
+          $ref: '#/definitions/model.History'
       produces:
       - application/json
       responses:

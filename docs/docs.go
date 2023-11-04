@@ -96,7 +96,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create Customer",
+                "description": "Create a new Customer",
                 "consumes": [
                     "application/json"
                 ],
@@ -133,7 +133,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "DeleteCustomer by  CustomerId",
+                "description": "Delete Customer by CustomerId",
                 "produces": [
                     "application/json"
                 ],
@@ -216,6 +216,109 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.History"
+                        }
+                    },
+                    "500": {
+                        "description": "{\"Message\": err.Error()}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Modify History",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "History"
+                ],
+                "parameters": [
+                    {
+                        "description": "History Information",
+                        "name": "History",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.History"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.History"
+                        }
+                    },
+                    "500": {
+                        "description": "{\"Message\": err.Error()}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new History",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "History"
+                ],
+                "parameters": [
+                    {
+                        "description": "History Information",
+                        "name": "History",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.History"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.History"
+                        }
+                    },
+                    "500": {
+                        "description": "{\"Message\": err.Error()}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete History by HistoryId",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "History"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "History Id",
+                        "name": "HistoryId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message\": \"Delete success",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "500": {

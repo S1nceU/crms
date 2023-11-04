@@ -10,4 +10,5 @@ type Repository interface {
 	CreateHistory(in *model.History) (*model.History, error)       // Create a new History
 	UpdateHistory(in *model.History) (*model.History, error)       // Update History data
 	DeleteHistory(in *model.History) error                         // Delete Histroy by HistoryId
+	ExistCustomerId(in *model.Customer) (*model.Customer, error)   // Confirm Customer Existed
 }

@@ -69,7 +69,7 @@ func (u *CustomerHandler) GetCustomer(c *gin.Context) {
 }
 
 // CreateCustomer @Summary CreateCustomer
-// @Description Create Customer
+// @Description Create a new Customer
 // @Tags Customer
 // @Accept json
 // @Produce application/json
@@ -104,7 +104,6 @@ func (u *CustomerHandler) CreateCustomer(c *gin.Context) {
 			return
 		}
 	}
-
 	c.JSON(200, createCustomer)
 }
 
@@ -151,7 +150,7 @@ func (u *CustomerHandler) ModifyCustomer(c *gin.Context) {
 }
 
 // DeleteCustomer @Summary DeleteCustomer
-// @Description DeleteCustomer by  CustomerId
+// @Description Delete Customer by CustomerId
 // @Tags Customer
 // @Produce application/json
 // @Param CustomerId query string true "Customer Id"
@@ -159,8 +158,8 @@ func (u *CustomerHandler) ModifyCustomer(c *gin.Context) {
 // @Failure 500 {string} string "{"Message": err.Error()}"
 // @Router /customer [delete]
 func (u *CustomerHandler) DeleteCustomer(c *gin.Context) {
-	CustomerId, _ := strconv.Atoi(c.Query("CustomerId"))
-	err := u.ser.DeleteCustomer(CustomerId)
+	customerId, _ := strconv.Atoi(c.Query("CustomerId"))
+	err := u.ser.DeleteCustomer(customerId)
 	if err != nil {
 		if err.Error() == "error CRMS : There is no this customer" {
 			c.JSON(200, gin.H{

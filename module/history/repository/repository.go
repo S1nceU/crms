@@ -56,8 +56,13 @@ func (u *HistoryRepository) UpdateHistory(in *model.History) (*model.History, er
 }
 
 func (u *HistoryRepository) DeleteHistory(in *model.History) error {
-	var out *model.History
 	var err error
-	err = u.orm.Where("history_id = ?", in.HistoryId).Delete(&out).Error
+	err = u.orm.Where("history_id = ?", in.HistoryId).Delete(&in).Error
 	return err
+}
+
+func (u *HistoryRepository) ExistCustomerId(in *model.Customer) (*model.Customer, error) {
+	var err error
+	err = u.orm.Where("customer_id = ?", in.CustomerId).Find(&in).Error
+	return in, err
 }
