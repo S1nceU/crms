@@ -1,4 +1,4 @@
-module crms
+module github.com/S1nceU/CRMS
 
 go 1.21.3
 

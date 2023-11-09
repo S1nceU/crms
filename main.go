@@ -1,22 +1,22 @@
 package main
 
 import (
-	_ "crms/docs"
-	"crms/model"
 	"fmt"
+	_ "github.com/S1nceU/CRMS/docs"
+	"github.com/S1nceU/CRMS/model"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	_customerHandlerHttpDelivery "crms/module/customer/delivery/http"
-	_customerRepo "crms/module/customer/repository"
-	_customerSer "crms/module/customer/service"
+	_customerHandlerHttpDelivery "github.com/S1nceU/CRMS/module/customer/delivery/http"
+	_customerRepo "github.com/S1nceU/CRMS/module/customer/repository"
+	_customerSer "github.com/S1nceU/CRMS/module/customer/service"
 
-	_historyHandlerHttpDelivery "crms/module/history/delivery/http"
-	_historyRepo "crms/module/history/repository"
-	_historySer "crms/module/history/service"
+	_historyHandlerHttpDelivery "github.com/S1nceU/CRMS/module/history/delivery/http"
+	_historyRepo "github.com/S1nceU/CRMS/module/history/repository"
+	_historySer "github.com/S1nceU/CRMS/module/history/service"
 )
 
 const (

@@ -1,6 +1,6 @@
 package history
 
-import "crms/model"
+import "github.com/S1nceU/CRMS/model"
 
 type Service interface {
 	GetHistoryList() ([]model.History, error)

@@ -1,6 +1,6 @@
 package customer
 
-import "crms/model"
+import "github.com/S1nceU/CRMS/model"
 
 type Service interface {
 	GetCustomerList() ([]model.Customer, error)                        // Get all Customer

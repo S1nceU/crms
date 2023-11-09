@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"crms/model"
-	"crms/module/history"
+	"github.com/S1nceU/CRMS/model"
+	"github.com/S1nceU/CRMS/module/history"
 	"gorm.io/gorm"
 )
 

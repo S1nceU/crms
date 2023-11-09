@@ -1,10 +1,9 @@
 package service
 
 import (
-	"crms/model"
-	"crms/module/customer"
 	"errors"
-	"fmt"
+	"github.com/S1nceU/CRMS/model"
+	"github.com/S1nceU/CRMS/module/customer"
 )
 
 type CustomerService struct {
@@ -21,7 +20,9 @@ func (u *CustomerService) GetCustomerList() ([]model.Customer, error) {
 	var err error
 	var point []*model.Customer
 	var out []model.Customer
-	point, err = u.repo.GetCustomerList()
+	if point, err = u.repo.GetCustomerList(); err != nil {
+		return nil, err
+	}
 	for i := 0; i < len(point); i++ {
 		out = append(out, *point[i])
 	}
@@ -35,7 +36,9 @@ func (u *CustomerService) GetCustomerListForCitizenship(in string) ([]model.Cust
 	newCustomer := &model.Customer{
 		Citizenship: in,
 	}
-	point, err = u.repo.GetCustomerListForCitizenship(newCustomer)
+	if point, err = u.repo.GetCustomerListForCitizenship(newCustomer); err != nil {
+		return nil, err
+	}
 	for i := 0; i < len(point); i++ {
 		out = append(out, *point[i])
 	}
@@ -47,7 +50,9 @@ func (u *CustomerService) GetCustomer(in string) (*model.Customer, error) {
 	newCustomer := &model.Customer{
 		ID: in,
 	}
-	if newCustomer, err = u.repo.GetCustomer(newCustomer); newCustomer.CustomerId == 0 {
+	if newCustomer, err = u.repo.GetCustomer(newCustomer); err != nil {
+		return nil, err
+	} else if newCustomer.CustomerId == 0 {
 		return nil, errors.New("error CRMS : There is no this customer")
 	}
 	return newCustomer, err
@@ -58,7 +63,9 @@ func (u *CustomerService) GetCustomerForCID(in int) (*model.Customer, error) {
 	newCustomer := &model.Customer{
 		CustomerId: in,
 	}
-	if newCustomer, err = u.repo.GetCustomerForCID(newCustomer); newCustomer.Name == "" {
+	if newCustomer, err = u.repo.GetCustomerForCID(newCustomer); err != nil {
+		return nil, err
+	} else if newCustomer.Name == "" {
 		return nil, errors.New("error CRMS : There is no this customer")
 	}
 	return newCustomer, err
@@ -69,31 +76,28 @@ func (u *CustomerService) CreateCustomer(in *model.Customer) (*model.Customer, e
 	var newCustomer *model.Customer
 
 	if in.Name == "" {
-		fmt.Println("Test1")
 		return nil, errors.New("error CRMS : Customer Info is incomplete")
 	}
 	if in.Gender != "Male" && in.Gender != "Female" {
-		fmt.Println("Test2")
 		return nil, errors.New("error CRMS : Customer Info is incomplete")
 	}
 	if in.Birthday == "" {
-		fmt.Println("Test3")
 		return nil, errors.New("error CRMS : Customer Info is incomplete")
 	}
 	if in.ID == "" {
-		fmt.Println("Test4")
 		return nil, errors.New("error CRMS : Customer Info is incomplete")
 	}
 	if in.Citizenship == "" {
-		fmt.Println("Test5")
 		return nil, errors.New("error CRMS : Customer Info is incomplete")
 	}
 
-	if newCustomer, err = u.repo.GetCustomer(in); newCustomer.CustomerId == 0 {
+	if newCustomer, err = u.repo.GetCustomer(in); err != nil {
+		return nil, err
+	} else if newCustomer.CustomerId != 0 {
+		return nil, errors.New("error CRMS : This customer is already existed")
+	} else {
 		newCustomer, err = u.repo.CreateCustomer(newCustomer)
 		return newCustomer, err
-	} else {
-		return nil, errors.New("error CRMS : This customer is already existed")
 	}
 }
 

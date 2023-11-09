@@ -1,8 +1,8 @@
 package http
 
 import (
-	"crms/model"
-	"crms/module/history"
+	"github.com/S1nceU/CRMS/model"
+	"github.com/S1nceU/CRMS/module/history"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
