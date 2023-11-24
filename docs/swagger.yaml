@@ -1,0 +1,276 @@
+basePath: /api
+definitions:
+  model.Customer:
+    properties:
+      Address:
+        type: string
+      Birthday:
+        type: string
+      CarNumber:
+        type: string
+      Citizenship:
+        type: string
+      CustomerId:
+        type: integer
+      Gender:
+        type: string
+      ID:
+        type: string
+      Name:
+        type: string
+      Note:
+        type: string
+      PhoneNumber:
+        type: string
+      history:
+        $ref: '#/definitions/model.History'
+    type: object
+  model.History:
+    properties:
+      CustomerId:
+        type: integer
+      Date:
+        type: string
+      HistoryId:
+        type: integer
+      Note:
+        type: string
+      NumberOfPeople:
+        type: integer
+      Price:
+        type: integer
+      Room:
+        type: string
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact:
+    email: jjkk900925@gmail.com
+    name: Jason Yang
+    url: http://www.google.com
+  description: CRMS_Swagger information
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://www.google.com
+  title: CRMS_Swagger
+  version: "1.0"
+paths:
+  /customer:
+    delete:
+      description: Delete Customer by CustomerId
+      parameters:
+      - description: Customer Id
+        in: query
+        name: CustomerId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Message": "Delete success'
+          schema:
+            type: string
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - Customer
+    get:
+      description: Get Customer by ID
+      parameters:
+      - description: Customer ID
+        example: L123546789
+        in: query
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Customer'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - Customer
+    post:
+      consumes:
+      - application/json
+      description: Create a new Customer
+      parameters:
+      - description: Customer Information
+        in: body
+        name: Customer
+        required: true
+        schema:
+          $ref: '#/definitions/model.Customer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Customer'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - Customer
+    put:
+      consumes:
+      - application/json
+      description: Modify Customer
+      parameters:
+      - description: Customer Information
+        in: body
+        name: Customer
+        required: true
+        schema:
+          $ref: '#/definitions/model.Customer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Customer'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - Customer
+  /customerList:
+    get:
+      consumes:
+      - application/json
+      description: Get all Customer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Customer'
+        "500":
+          description: '{"Message": "Internal Error!"}'
+          schema:
+            type: string
+      tags:
+      - Customer
+  /history:
+    delete:
+      description: Delete History by HistoryId
+      parameters:
+      - description: History Id
+        in: query
+        name: HistoryId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Message": "Delete success'
+          schema:
+            type: string
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - History
+    get:
+      description: Get History by CustomerId
+      parameters:
+      - description: Customer Id
+        in: query
+        name: CustomerId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.History'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - History
+    post:
+      description: Create a new History
+      parameters:
+      - description: History Information
+        in: body
+        name: History
+        required: true
+        schema:
+          $ref: '#/definitions/model.History'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.History'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - History
+    put:
+      consumes:
+      - application/json
+      description: Modify History
+      parameters:
+      - description: History Information
+        in: body
+        name: History
+        required: true
+        schema:
+          $ref: '#/definitions/model.History'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.History'
+        "500":
+          description: '{"Message": err.Error()}'
+          schema:
+            type: string
+      tags:
+      - History
+  /historyList:
+    get:
+      consumes:
+      - application/json
+      description: Get all History
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.History'
+        "500":
+          description: '{"Message": "Internal Error!"}'
+          schema:
+            type: string
+      tags:
+      - History
+swagger: "2.0"

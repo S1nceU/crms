@@ -1,13 +1,13 @@
 package customer
 
-import "crms/model"
+import "github.com/S1nceU/CRMS/model"
 
 type Service interface {
-	GetCustomerList() ([]model.Customer, error)                        // Get all Customer
-	GetCustomerListForCitizenship(in string) ([]model.Customer, error) // Get all Customer by citizenship
-	GetCustomer(in string) (*model.Customer, error)                    // Get Customer by ID and citizenship
-	GetCustomerForCID(in int) (*model.Customer, error)                 // Get Customer by customer_id
-	CreateCustomer(in []byte) (*model.Customer, error)                 // Create a new customer
-	UpdateCustomer(in []byte) (*model.Customer, error)                 // Update customer data by a whole customer
-	DeleteCustomer(in int) error                                       // Delete customer by customer_id
+	ListCustomers() ([]model.Customer, error)                      // Get all Customers
+	GetCustomersByCitizenship(in string) ([]model.Customer, error) // Get all Customers by citizenship
+	GetCustomerByID(in string) (*model.Customer, error)            // Get Customer by ID
+	GetCustomerByCustomerId(in int) (*model.Customer, error)       // Get Customer by customer_id
+	CreateCustomer(in *model.Customer) (*model.Customer, error)    // Create a new Customer
+	UpdateCustomer(in *model.Customer) (*model.Customer, error)    // Update customer data
+	DeleteCustomer(in int) error                                   // Delete Customer by customer_id
 }
