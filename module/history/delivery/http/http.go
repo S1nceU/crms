@@ -15,14 +15,14 @@ func NewHistoryHandler(e *gin.Engine, ser history.Service) {
 	handler := &HistoryHandler{
 		ser: ser,
 	}
-	e.GET("/api/historyList", handler.GetHistoryList)
+	e.GET("/api/historyList", handler.ListHistories)
 	e.GET("/api/history", handler.GetHistory)
 	e.POST("/api/history", handler.CreateHistory)
 	e.PUT("/api/history", handler.ModifyHistory)
 	e.DELETE("/api/history", handler.DeleteHistory)
 }
 
-// GetHistoryList @Summary GetHistoryList
+// ListHistories @Summary ListHistories
 // @Description Get all History
 // @Accept json
 // @Tags History
@@ -30,8 +30,8 @@ func NewHistoryHandler(e *gin.Engine, ser history.Service) {
 // @Success 200 {object} model.History
 // @Failure 500 {string} string "{"Message": "Internal Error!"}"
 // @Router /historyList [get]
-func (u *HistoryHandler) GetHistoryList(c *gin.Context) {
-	historyList, err := u.ser.GetHistoryList()
+func (u *HistoryHandler) ListHistories(c *gin.Context) {
+	historyList, err := u.ser.ListHistories()
 	if err != nil {
 		c.JSON(500, gin.H{
 			"Message": "Internal Error!",
@@ -45,13 +45,13 @@ func (u *HistoryHandler) GetHistoryList(c *gin.Context) {
 // @Description Get History by CustomerId
 // @Tags History
 // @Produce application/json
-// @Param CustomerId query string true "Customer Id"
+// @Param CustomerId query string true "Customer id"
 // @Success 200 {object} model.History
 // @Failure 500 {string} string "{"Message": err.Error()}"
 // @Router /history [get]
 func (u *HistoryHandler) GetHistory(c *gin.Context) {
 	customerId, _ := strconv.Atoi(c.Query("CustomerId"))
-	historyData, err := u.ser.GetHistory(customerId)
+	historyData, err := u.ser.GetHistoryByID(customerId)
 	if err != nil {
 		if err.Error() == "error CRMS : There is no this customer" {
 			c.JSON(200, gin.H{
@@ -159,7 +159,7 @@ func (u *HistoryHandler) ModifyHistory(c *gin.Context) {
 // @Description Delete History by HistoryId
 // @Tags History
 // @Produce application/json
-// @Param HistoryId query string true "History Id"
+// @Param HistoryId query string true "History id"
 // @Success 200 {object} string "Message": "Delete success"
 // @Failure 500 {string} string "{"Message": err.Error()}"
 // @Router /history [delete]

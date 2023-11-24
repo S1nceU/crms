@@ -71,11 +71,12 @@ func main() {
 	server := gin.Default()
 
 	customerRepo := _customerRepo.NewCustomerRepository(db)
-	customerSer := _customerSer.NewCustomerService(customerRepo)
-	_customerHandlerHttpDelivery.NewCustomerHandler(server, customerSer)
-
 	historyRepo := _historyRepo.NewHistoryRepository(db)
+
+	customerSer := _customerSer.NewCustomerService(customerRepo)
 	historySer := _historySer.NewHistoryService(historyRepo)
+
+	_customerHandlerHttpDelivery.NewCustomerHandler(server, customerSer, historySer)
 	_historyHandlerHttpDelivery.NewHistoryHandler(server, historySer)
 
 	if swagHandler != nil {

@@ -3,26 +3,29 @@ package http
 import (
 	"github.com/S1nceU/CRMS/model"
 	"github.com/S1nceU/CRMS/module/customer"
+	"github.com/S1nceU/CRMS/module/history"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
 type CustomerHandler struct {
-	ser customer.Service
+	customerSer customer.Service
+	historySer  history.Service
 }
 
-func NewCustomerHandler(e *gin.Engine, ser customer.Service) {
+func NewCustomerHandler(e *gin.Engine, customerSer customer.Service, historySer history.Service) {
 	handler := &CustomerHandler{
-		ser: ser,
+		customerSer: customerSer,
+		historySer:  historySer,
 	}
-	e.GET("/api/customerList", handler.GetCustomerList)
-	e.GET("/api/customer", handler.GetCustomer)
+	e.GET("/api/customerList", handler.ListCustomers)
+	e.GET("/api/customer", handler.GetCustomerByID)
 	e.POST("/api/customer", handler.CreateCustomer)
 	e.PUT("/api/customer", handler.ModifyCustomer)
 	e.DELETE("/api/customer", handler.DeleteCustomer)
 }
 
-// GetCustomerList @Summary GetCustomerList
+// ListCustomers @Summary ListCustomers
 // @Description Get all Customer
 // @Accept json
 // @Tags Customer
@@ -30,8 +33,8 @@ func NewCustomerHandler(e *gin.Engine, ser customer.Service) {
 // @Success 200 {object} model.Customer
 // @Failure 500 {string} string "{"Message": "Internal Error!"}"
 // @Router /customerList [get]
-func (u *CustomerHandler) GetCustomerList(c *gin.Context) {
-	customerList, err := u.ser.GetCustomerList()
+func (u *CustomerHandler) ListCustomers(c *gin.Context) {
+	customerList, err := u.customerSer.ListCustomers()
 	if err != nil {
 		c.JSON(500, gin.H{
 			"Message": "Internal Error!",
@@ -41,7 +44,7 @@ func (u *CustomerHandler) GetCustomerList(c *gin.Context) {
 	c.JSON(200, customerList)
 }
 
-// GetCustomer @Summary GetCustomer
+// GetCustomerByID @Summary GetCustomerByID
 // @Description Get Customer by ID
 // @Tags Customer
 // @Produce application/json
@@ -49,9 +52,9 @@ func (u *CustomerHandler) GetCustomerList(c *gin.Context) {
 // @Success 200 {object} model.Customer
 // @Failure 500 {string} string "{"Message": err.Error()}"
 // @Router /customer [get]
-func (u *CustomerHandler) GetCustomer(c *gin.Context) {
+func (u *CustomerHandler) GetCustomerByID(c *gin.Context) {
 	iD := c.Query("ID")
-	customerData, err := u.ser.GetCustomer(iD)
+	customerData, err := u.customerSer.GetCustomerByID(iD)
 	if err != nil {
 		if err.Error() == "error CRMS : There is no this customer" {
 			c.JSON(200, gin.H{
@@ -85,7 +88,7 @@ func (u *CustomerHandler) CreateCustomer(c *gin.Context) {
 		})
 		return
 	}
-	createCustomer, err := u.ser.CreateCustomer(&json)
+	createCustomer, err := u.customerSer.CreateCustomer(&json)
 	if err != nil {
 		if err.Error() == "error CRMS : This customer is already existed" {
 			c.JSON(200, gin.H{
@@ -124,7 +127,7 @@ func (u *CustomerHandler) ModifyCustomer(c *gin.Context) {
 		})
 		return
 	}
-	modifyCustomer, err := u.ser.UpdateCustomer(&json)
+	modifyCustomer, err := u.customerSer.UpdateCustomer(&json)
 	if err != nil {
 		if err.Error() == "error CRMS : There is no this customer" {
 			c.JSON(200, gin.H{
@@ -153,13 +156,15 @@ func (u *CustomerHandler) ModifyCustomer(c *gin.Context) {
 // @Description Delete Customer by CustomerId
 // @Tags Customer
 // @Produce application/json
-// @Param CustomerId query string true "Customer Id"
+// @Param CustomerId query string true "Customer id"
 // @Success 200 {object} string "Message": "Delete success"
 // @Failure 500 {string} string "{"Message": err.Error()}"
 // @Router /customer [delete]
 func (u *CustomerHandler) DeleteCustomer(c *gin.Context) {
+	var err error
 	customerId, _ := strconv.Atoi(c.Query("CustomerId"))
-	err := u.ser.DeleteCustomer(customerId)
+	err = u.historySer.DeleteHistoriesByCustomer(customerId)
+	err = u.customerSer.DeleteCustomer(customerId)
 	if err != nil {
 		if err.Error() == "error CRMS : There is no this customer" {
 			c.JSON(200, gin.H{

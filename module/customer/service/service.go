@@ -16,11 +16,11 @@ func NewCustomerService(repo customer.Repository) customer.Service {
 	}
 }
 
-func (u *CustomerService) GetCustomerList() ([]model.Customer, error) {
+func (u *CustomerService) ListCustomers() ([]model.Customer, error) {
 	var err error
 	var point []*model.Customer
 	var out []model.Customer
-	if point, err = u.repo.GetCustomerList(); err != nil {
+	if point, err = u.repo.ListCustomers(); err != nil {
 		return nil, err
 	}
 	for i := 0; i < len(point); i++ {
@@ -29,14 +29,14 @@ func (u *CustomerService) GetCustomerList() ([]model.Customer, error) {
 	return out, err
 }
 
-func (u *CustomerService) GetCustomerListForCitizenship(in string) ([]model.Customer, error) {
+func (u *CustomerService) GetCustomersByCitizenship(in string) ([]model.Customer, error) {
 	var err error
 	var point []*model.Customer
 	var out []model.Customer
 	newCustomer := &model.Customer{
 		Citizenship: in,
 	}
-	if point, err = u.repo.GetCustomerListForCitizenship(newCustomer); err != nil {
+	if point, err = u.repo.ListCustomersForCitizenship(newCustomer); err != nil {
 		return nil, err
 	}
 	for i := 0; i < len(point); i++ {
@@ -45,12 +45,12 @@ func (u *CustomerService) GetCustomerListForCitizenship(in string) ([]model.Cust
 	return out, err
 }
 
-func (u *CustomerService) GetCustomer(in string) (*model.Customer, error) {
+func (u *CustomerService) GetCustomerByID(in string) (*model.Customer, error) {
 	var err error
 	newCustomer := &model.Customer{
 		ID: in,
 	}
-	if newCustomer, err = u.repo.GetCustomer(newCustomer); err != nil {
+	if newCustomer, err = u.repo.GetCustomerByID(newCustomer); err != nil {
 		return nil, err
 	} else if newCustomer.CustomerId == 0 {
 		return nil, errors.New("error CRMS : There is no this customer")
@@ -58,12 +58,12 @@ func (u *CustomerService) GetCustomer(in string) (*model.Customer, error) {
 	return newCustomer, err
 }
 
-func (u *CustomerService) GetCustomerForCID(in int) (*model.Customer, error) {
+func (u *CustomerService) GetCustomerByCustomerId(in int) (*model.Customer, error) {
 	var err error
 	newCustomer := &model.Customer{
 		CustomerId: in,
 	}
-	if newCustomer, err = u.repo.GetCustomerForCID(newCustomer); err != nil {
+	if newCustomer, err = u.repo.GetCustomerByCustomerId(newCustomer); err != nil {
 		return nil, err
 	} else if newCustomer.Name == "" {
 		return nil, errors.New("error CRMS : There is no this customer")
@@ -91,7 +91,7 @@ func (u *CustomerService) CreateCustomer(in *model.Customer) (*model.Customer, e
 		return nil, errors.New("error CRMS : Customer Info is incomplete")
 	}
 
-	if newCustomer, err = u.repo.GetCustomer(in); err != nil {
+	if newCustomer, err = u.repo.GetCustomerByID(in); err != nil {
 		return nil, err
 	} else if newCustomer.CustomerId != 0 {
 		return nil, errors.New("error CRMS : This customer is already existed")
@@ -120,7 +120,7 @@ func (u *CustomerService) UpdateCustomer(in *model.Customer) (*model.Customer, e
 		return nil, errors.New("error CRMS : Customer Info is incomplete")
 	}
 
-	if _, err = u.GetCustomerForCID(in.CustomerId); err != nil {
+	if _, err = u.GetCustomerByCustomerId(in.CustomerId); err != nil {
 		return nil, err
 	}
 	if newCustomer, err = u.repo.UpdateCustomer(in); err != nil {
@@ -134,7 +134,7 @@ func (u *CustomerService) DeleteCustomer(in int) error {
 	newCustomer := &model.Customer{
 		CustomerId: in,
 	}
-	if _, err = u.GetCustomerForCID(newCustomer.CustomerId); err != nil {
+	if _, err = u.GetCustomerByCustomerId(newCustomer.CustomerId); err != nil {
 		return err
 	}
 	if err = u.repo.DeleteCustomer(newCustomer); err != nil {

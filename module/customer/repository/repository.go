@@ -16,14 +16,14 @@ func NewCustomerRepository(orm *gorm.DB) customer.Repository {
 	}
 }
 
-func (u *CustomerRepository) GetCustomerList() ([]*model.Customer, error) {
+func (u *CustomerRepository) ListCustomers() ([]*model.Customer, error) {
 	var err error
 	var in []*model.Customer
 	err = u.orm.Find(&in).Error
 	return in, err
 }
 
-func (u *CustomerRepository) GetCustomerListForCitizenship(in *model.Customer) ([]*model.Customer, error) {
+func (u *CustomerRepository) ListCustomersForCitizenship(in *model.Customer) ([]*model.Customer, error) {
 	var err error
 	var out []*model.Customer
 	if err = u.orm.Where("Citizenship = ?", in.Citizenship).Find(&out).Error; err != nil {
@@ -32,13 +32,13 @@ func (u *CustomerRepository) GetCustomerListForCitizenship(in *model.Customer) (
 	return out, err
 }
 
-func (u *CustomerRepository) GetCustomer(in *model.Customer) (*model.Customer, error) {
+func (u *CustomerRepository) GetCustomerByID(in *model.Customer) (*model.Customer, error) {
 	var err error
 	err = u.orm.Where("ID = ?", in.ID).Find(&in).Error
 	return in, err
 }
 
-func (u *CustomerRepository) GetCustomerForCID(in *model.Customer) (*model.Customer, error) {
+func (u *CustomerRepository) GetCustomerByCustomerId(in *model.Customer) (*model.Customer, error) {
 	var err error
 	err = u.orm.Where("customer_id = ?", in.CustomerId).Find(&in).Error
 	return in, err

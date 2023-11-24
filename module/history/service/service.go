@@ -16,11 +16,11 @@ func NewHistoryService(repo history.Repository) history.Service {
 	}
 }
 
-func (u *HistoryService) GetHistoryList() ([]model.History, error) {
+func (u *HistoryService) ListHistories() ([]model.History, error) {
 	var err error
 	var point []*model.History
 	var out []model.History
-	if point, err = u.repo.GetHistoryList(); err != nil {
+	if point, err = u.repo.GetAllHistories(); err != nil {
 		return nil, err
 	}
 	for i := 0; i < len(point); i++ {
@@ -29,7 +29,7 @@ func (u *HistoryService) GetHistoryList() ([]model.History, error) {
 	return out, err
 }
 
-func (u *HistoryService) GetHistory(in int) ([]model.History, error) {
+func (u *HistoryService) GetHistoryByID(in int) ([]model.History, error) {
 	var err error
 	var point []*model.History
 	var out []model.History
@@ -39,13 +39,13 @@ func (u *HistoryService) GetHistory(in int) ([]model.History, error) {
 	newCustomer := &model.Customer{
 		CustomerId: in,
 	}
-	if newCustomer, err = u.repo.ExistCustomerId(newCustomer); err != nil {
+	if newCustomer, err = u.repo.ConfirmCustomerExistence(newCustomer); err != nil {
 		return nil, err
 	} else if newCustomer.Name == "" {
 		return nil, errors.New("error CRMS : There is no this customer")
 	}
 
-	if point, err = u.repo.GetHistory(newHistory); err != nil {
+	if point, err = u.repo.GetHistoriesByCustomer(newHistory); err != nil {
 		return nil, err
 	} else if len(point) == 0 {
 		return nil, errors.New("error CRMS : There is not any history")
@@ -56,14 +56,14 @@ func (u *HistoryService) GetHistory(in int) ([]model.History, error) {
 	return out, err
 }
 
-func (u *HistoryService) GetHistoryForDate(in string) ([]model.History, error) {
+func (u *HistoryService) GetHistoriesForDate(in string) ([]model.History, error) {
 	var err error
 	var point []*model.History
 	var out []model.History
 	newHistory := &model.History{
 		Date: in,
 	}
-	if point, err = u.repo.GetHistoryForDate(newHistory); err != nil {
+	if point, err = u.repo.GetHistoriesForDate(newHistory); err != nil {
 		return nil, err
 	} else if len(point) == 0 {
 		return nil, errors.New("error CRMS : There was no customer in " + in)
@@ -74,12 +74,12 @@ func (u *HistoryService) GetHistoryForDate(in string) ([]model.History, error) {
 	return out, err
 }
 
-func (u *HistoryService) GetHistoryForHId(in int) (*model.History, error) {
+func (u *HistoryService) GetHistoryByHistoryId(in int) (*model.History, error) {
 	var err error
 	newHistory := &model.History{
 		HistoryId: in,
 	}
-	if newHistory, err = u.repo.GetHistoryForHId(newHistory); err != nil {
+	if newHistory, err = u.repo.GetHistoryByHistoryId(newHistory); err != nil {
 		return nil, err
 	} else if newHistory.CustomerId == 0 {
 		return nil, errors.New("error CRMS : There is no this history")
@@ -93,7 +93,7 @@ func (u *HistoryService) CreateHistory(in *model.History) (*model.History, error
 	newCustomer := &model.Customer{
 		CustomerId: in.CustomerId,
 	}
-	if newCustomer, err = u.repo.ExistCustomerId(newCustomer); err != nil {
+	if newCustomer, err = u.repo.ConfirmCustomerExistence(newCustomer); err != nil {
 		return nil, err
 	}
 
@@ -113,7 +113,7 @@ func (u *HistoryService) CreateHistory(in *model.History) (*model.History, error
 		return nil, errors.New("error CRMS : History Info is incomplete")
 	}
 
-	if _, err = u.repo.GetHistory(in); err != nil {
+	if _, err = u.repo.GetHistoriesByCustomer(in); err != nil {
 		return nil, err
 	}
 	if newHistory, err = u.repo.CreateHistory(in); err != nil {
@@ -128,10 +128,10 @@ func (u *HistoryService) UpdateHistory(in *model.History) (*model.History, error
 	newCustomer := &model.Customer{
 		CustomerId: in.CustomerId,
 	}
-	if newCustomer, err = u.repo.ExistCustomerId(newCustomer); err != nil {
+	if newCustomer, err = u.repo.ConfirmCustomerExistence(newCustomer); err != nil {
 		return nil, err
 	}
-	if newHistory, err = u.GetHistoryForHId(in.HistoryId); err != nil {
+	if newHistory, err = u.GetHistoryByHistoryId(in.HistoryId); err != nil {
 		return nil, err
 	}
 
@@ -153,7 +153,7 @@ func (u *HistoryService) UpdateHistory(in *model.History) (*model.History, error
 	if in.Price == 0 {
 		return nil, errors.New("error CRMS : History Info is incomplete")
 	}
-	if _, err = u.GetHistoryForHId(in.HistoryId); err != nil {
+	if _, err = u.GetHistoryByHistoryId(in.HistoryId); err != nil {
 		return nil, err
 	}
 	if newHistory, err = u.repo.UpdateHistory(in); err != nil {
@@ -168,10 +168,24 @@ func (u *HistoryService) DeleteHistory(in int) error {
 	newHistory := &model.History{
 		HistoryId: in,
 	}
-	if _, err = u.GetHistoryForHId(newHistory.HistoryId); err != nil {
+	if _, err = u.GetHistoryByHistoryId(newHistory.HistoryId); err != nil {
 		return err
 	}
 	if err = u.repo.DeleteHistory(newHistory); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *HistoryService) DeleteHistoriesByCustomer(in int) error {
+	var err error
+	newHistory := &model.History{
+		CustomerId: in,
+	}
+	if _, err = u.GetHistoryByID(newHistory.CustomerId); err != nil {
+		return err
+	}
+	if err = u.repo.DeleteHistoriesByCustomer(newHistory); err != nil {
 		return err
 	}
 	return nil
